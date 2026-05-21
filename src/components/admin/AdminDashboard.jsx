@@ -1360,7 +1360,7 @@ export default function AdminDashboard({ show, data, onSave, onExit }) {
 
   return (
     <>
-      <div id="admin-dash" className="show">
+      <div id="admin-dash" className="show" data-lenis-prevent>
         <div className="adash-topbar">
           <div className="adash-topbar-left">
             <button

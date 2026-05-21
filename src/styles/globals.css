@@ -765,6 +765,24 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
   position: fixed; inset: 0; z-index: 8000;
   background: #0d0d0d; display: none; flex-direction: column;
 }
+#admin-dash .adash-content, #admin-dash .adash-sidebar {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #333 #111;
+}
+#admin-dash ::-webkit-scrollbar {
+  width: 8px;
+}
+#admin-dash ::-webkit-scrollbar-track {
+  background: #111;
+}
+#admin-dash ::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+#admin-dash ::-webkit-scrollbar-thumb:hover {
+  background: var(--coral);
+}
 #admin-dash.show { display: flex; }
 .adash-topbar {
   display: flex; align-items: center; justify-content: space-between;
