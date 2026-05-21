@@ -1,0 +1,63 @@
+import { useEffect, useRef, useState } from 'react';
+
+export default function Lightbox({ items, initialId, categories, onClose }) {
+  const [idx, setIdx] = useState(0);
+  const tsX = useRef(0);
+
+  useEffect(() => {
+    if (!items || !items.length) return;
+    const i = items.findIndex((g) => g.id === initialId);
+    setIdx(i >= 0 ? i : 0);
+  }, [items, initialId]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') setIdx((p) => (p + 1) % items.length);
+      if (e.key === 'ArrowLeft') setIdx((p) => (p - 1 + items.length) % items.length);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [items, onClose]);
+
+  if (!items || !items.length) return null;
+
+  const item = items[idx];
+  const cats = categories || {};
+
+  const next = () => setIdx((p) => (p + 1) % items.length);
+  const prev = () => setIdx((p) => (p - 1 + items.length) % items.length);
+
+  return (
+    <div className="lightbox open" id="lightbox"
+      onTouchStart={(e) => { tsX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => {
+        const diff = tsX.current - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 45) { diff > 0 ? next() : prev(); }
+      }}
+    >
+      <div className="lb-overlay" onClick={onClose} />
+      <button className="lb-close" onClick={onClose}>✕</button>
+      <button className="lb-prev" onClick={prev}>‹</button>
+      <button className="lb-next" onClick={next}>›</button>
+      <div className="lb-wrap">
+        <div className="lb-img-box">
+          {item.imgUrl
+            ? <img className="lb-img" src={item.imgUrl} alt="" />
+            : <div className="lb-emoji-big" style={{ display: 'flex' }}>{item.emoji || '🎨'}</div>
+          }
+        </div>
+        <div className="lb-info">
+          <div className="lb-cat-lbl">{cats[item.cat] || item.cat}</div>
+          <div className="lb-title-lbl">{item.title}</div>
+          <div className="lb-counter">{idx + 1} / {items.length}</div>
+        </div>
+        <div className="lb-dots" id="lb-dots">
+          {items.map((_, i) => (
+            <button key={i} className={`lb-dot${i === idx ? ' active' : ''}`} onClick={() => setIdx(i)} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
