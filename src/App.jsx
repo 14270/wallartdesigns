@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './styles/globals.css';
+import Lenis from 'lenis';
 import { useStorage } from './hooks/useStorage';
 import { trackVisit, trackPortfolioClick, trackLightboxOpen } from './hooks/useAnalytics';
 import Cursor from './components/Cursor';
@@ -28,7 +29,41 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    window.lenis = lenis;
+
+    return () => {
+      lenis.destroy();
+      window.lenis = null;
+    };
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = (adminDashOpen || lightbox.open) ? 'hidden' : '';
+    if (window.lenis) {
+      if (adminDashOpen || lightbox.open) {
+        window.lenis.stop();
+      } else {
+        window.lenis.start();
+      }
+    }
     return () => { document.body.style.overflow = ''; };
   }, [adminDashOpen, lightbox.open]);
 
