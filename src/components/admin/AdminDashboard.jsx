@@ -1033,74 +1033,60 @@ function ReviewsPanel({ data, onChange }) {
         <div className="ad-group-label">Client Reviews</div>
         {reviews.map((r, i) => (
           <div className="rev-item" key={i}>
+            {/* Header row: Name + City + Delete */}
             <div className="rev-item-header">
               <input
                 type="text"
                 value={r.name || ""}
                 onChange={(e) => set(i, "name", e.target.value)}
-                placeholder="Name"
+                placeholder="Client Name"
               />
               <input
                 type="text"
                 value={r.loc || ""}
                 onChange={(e) => set(i, "loc", e.target.value)}
-                placeholder="City"
+                placeholder="City / Location"
               />
               <button className="gal-del-btn" onClick={() => del(i)}>
                 ✕
               </button>
             </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: ".5rem",
-                marginBottom: ".5rem",
-              }}
-            >
-              <input
-                type="text"
-                value={r.initials || ""}
-                onChange={(e) => set(i, "initials", e.target.value)}
-                placeholder="Initials"
-                className="ad-field input"
-                style={{
-                  background: "#1a1a1a",
-                  border: "1px solid #2a2a2a",
-                  borderRadius: "6px",
-                  padding: ".4rem .6rem",
-                  fontSize: ".78rem",
-                  color: "#ccc",
-                  fontFamily: "inherit",
-                  outline: "none",
-                }}
-              />
-              <select
-                value={r.av || "coral"}
-                onChange={(e) => set(i, "av", e.target.value)}
-                style={{
-                  background: "#1a1a1a",
-                  border: "1px solid #2a2a2a",
-                  borderRadius: "6px",
-                  padding: ".4rem .6rem",
-                  fontSize: ".78rem",
-                  color: "#ccc",
-                  fontFamily: "inherit",
-                  outline: "none",
-                }}
-              >
-                {["coral", "forest", "plum"].map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+            {/* Initials + Avatar colour row */}
+            <div className="rev-meta-row">
+              <div className="ad-field">
+                <label>Initials</label>
+                <input
+                  type="text"
+                  value={r.initials || ""}
+                  onChange={(e) => set(i, "initials", e.target.value)}
+                  placeholder="e.g. RC"
+                  maxLength={3}
+                />
+              </div>
+              <div className="ad-field">
+                <label>Avatar Colour</label>
+                <select
+                  value={r.av || "coral"}
+                  onChange={(e) => set(i, "av", e.target.value)}
+                >
+                  {["coral", "forest", "plum"].map((c) => (
+                    <option key={c} value={c}>
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <textarea
-              value={r.text || ""}
-              onChange={(e) => set(i, "text", e.target.value)}
-              placeholder="Review text"
-            />
+            {/* Review text */}
+            <div className="ad-field" style={{ marginTop: ".4rem" }}>
+              <label>Review Text</label>
+              <textarea
+                value={r.text || ""}
+                onChange={(e) => set(i, "text", e.target.value)}
+                placeholder="Write the client's review here…"
+                style={{ minHeight: "80px" }}
+              />
+            </div>
           </div>
         ))}
         <button
@@ -1398,7 +1384,7 @@ export default function AdminDashboard({ show, data, onSave, onExit }) {
                     boxShadow: "0 0 8px #E8A830",
                   }}
                 />{" "}
-                Unsaved Changes
+                <span className="adash-status-text">Unsaved Changes</span>
               </span>
             ) : (
               <span
@@ -1423,7 +1409,7 @@ export default function AdminDashboard({ show, data, onSave, onExit }) {
                     boxShadow: "0 0 8px #4ade80",
                   }}
                 />{" "}
-                All Changes Saved
+                <span className="adash-status-text">All Changes Saved</span>
               </span>
             )}
             <button

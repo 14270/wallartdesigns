@@ -213,7 +213,7 @@ export default function AnalyticsPanel({ siteData }) {
       </div>
 
       {/* ── 4 Stat Cards ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+      <div className="analytics-grid-4">
         <StatCard
           icon="👥"
           value={totals.totalVisitors.toLocaleString()}
@@ -246,7 +246,7 @@ export default function AnalyticsPanel({ siteData }) {
       </div>
 
       {/* ── Bar Chart + Device Split ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1rem', marginBottom: '1rem' }}>
+      <div className="analytics-grid-chart-split">
         {/* Chart */}
         <div style={{ background: '#1a1a1a', border: '1px solid #252525', borderRadius: '16px', padding: '1.4rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '.5rem' }}>
@@ -299,7 +299,7 @@ export default function AnalyticsPanel({ siteData }) {
       </div>
 
       {/* ── Top Categories + Activity Feed ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+      <div className="analytics-grid-2">
         {/* Top Categories */}
         <div style={{ background: '#1a1a1a', border: '1px solid #252525', borderRadius: '16px', padding: '1.4rem' }}>
           <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '1rem' }}>
@@ -334,7 +334,7 @@ export default function AnalyticsPanel({ siteData }) {
         <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '1rem' }}>
           📁 Upload Summary
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+        <div className="analytics-upload-summary-grid">
           {[
             {
               label: 'Gallery Images',
