@@ -193,9 +193,17 @@ export default function Hero({ hero }) {
       <div className="hero-deco-circle dc1" />
       <div className="hero-deco-circle dc2" />
 
+      {/* ── Mobile Badge (Shown before sliders on mobile) ── */}
+      <div className="hero-badge mobile-badge">
+        <div className="badge-dot">★</div>
+        <span className="badge-text">
+          {hero?.badge || "Bangalore's No.1 Wall Art Studio · 30+ Years"}
+        </span>
+      </div>
+
       {/* ── Left: text content ── */}
       <div className="hero-left">
-        <div className="hero-badge">
+        <div className="hero-badge desktop-badge">
           <div className="badge-dot">★</div>
           <span className="badge-text">
             {hero?.badge || "Bangalore's No.1 Wall Art Studio · 30+ Years"}

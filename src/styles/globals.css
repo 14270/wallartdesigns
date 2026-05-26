@@ -159,6 +159,9 @@ nav {
   border-radius: 100px; padding: .45rem 1rem .45rem .6rem;
   margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(232,96,58,.08);
 }
+.mobile-badge {
+  display: none;
+}
 .badge-dot {
   width: 28px; height: 28px; background: var(--coral); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -948,7 +951,10 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
   nav { padding: 1rem 1.5rem; }
   .nav-links { display: none; }
   .hero { grid-template-columns: 1fr; padding: 8rem 2rem 4rem; min-height: auto; gap: 0; }
-  .hero-right { display: flex !important; height: 260px; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-top: 2.5rem; }
+  .mobile-badge { display: inline-flex !important; order: -2; justify-self: start; margin-bottom: 0; }
+  .desktop-badge { display: none !important; }
+  .hero-right { order: -1; display: flex !important; height: 260px; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-top: 1.5rem; margin-bottom: 2.5rem; }
+  .hero-left { margin-top: 0; }
   .hero-right::-webkit-scrollbar { display: none; }
   .art-card { flex: 0 0 230px !important; height: 260px; scroll-snap-align: start; grid-row: auto !important; border-radius: 18px; }
   .art-card-main { flex: 0 0 230px !important; grid-row: auto !important; border-radius: 18px; }
@@ -979,7 +985,7 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
 @media(max-width: 768px) {
   nav { padding: .9rem 1.2rem; }
   .hero { padding: 7rem 1.5rem 3.5rem; }
-  .hero-right { height: 220px; gap: 10px; margin-top: 2rem; }
+  .hero-right { order: -1; height: 220px; gap: 10px; margin-top: 1.2rem; margin-bottom: 2rem; }
   .art-card { flex: 0 0 195px !important; height: 220px; border-radius: 16px; }
   .art-card-main { flex: 0 0 195px !important; border-radius: 16px; }
   .ac-tag { font-size: .55rem; padding: .22rem .7rem; }
@@ -1006,7 +1012,7 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
 @media(max-width: 480px) {
   nav { padding: .75rem 1rem; }
   .hero { padding: 6rem 1rem 3rem; }
-  .hero-right { height: 190px; margin-top: 1.8rem; }
+  .hero-right { order: -1; height: 190px; margin-top: 1.2rem; margin-bottom: 1.8rem; }
   .art-card { flex: 0 0 165px !important; height: 190px; border-radius: 14px; }
   .art-card-main { flex: 0 0 165px !important; border-radius: 14px; }
   .slide-content { padding: 1rem 1rem .85rem; }
