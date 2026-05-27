@@ -4,11 +4,11 @@ const fs = require('fs');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'data.json');
+const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
 app.use(express.json({ limit: '50mb' }));
 
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
@@ -114,8 +114,7 @@ app.post('/api/data', (req, res) => {
   }
 });
 
-// Serve static files from the 'uploads' directory
-app.use('/uploads', express.static(UPLOADS_DIR));
+// Removed separate uploads serving; served via dist now
 
 // Serve static files from the 'dist' directory
 app.use(express.static(path.join(__dirname, 'dist')));

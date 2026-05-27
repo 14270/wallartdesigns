@@ -5,7 +5,7 @@ function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
 
 async function loadFromServer() {
   try {
-    const res = await fetch(`/api/data?t=${Date.now()}`);
+    const res = await fetch(`/data.json?t=${Date.now()}`);
     if (res.ok) {
       const data = await res.json();
       return data; // Will return null if data.json doesn't exist yet
