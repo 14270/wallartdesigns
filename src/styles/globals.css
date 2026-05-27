@@ -69,6 +69,13 @@ html.lenis, html.lenis body {
   transform: translate(-50%, -50%);
   transition: width .3s, height .3s, border-color .3s;
 }
+/* Hide custom cursor on touch devices (mobile & tablet) */
+@media (hover: none) and (pointer: coarse) {
+  #cur, #cur-r {
+    display: none !important;
+  }
+  * { cursor: auto !important; }
+}
 
 /* ─── NAV ─── */
 nav {
