@@ -19,7 +19,7 @@
   --muted: #8A7060;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--cream);
@@ -393,6 +393,69 @@ nav {
 .ac-content { position: relative; z-index: 3; pointer-events: none; }
 .card-dots { display: flex; gap: 5px; margin-top: .5rem; }
 .card-track-old { display: flex; width: 100%; height: 100%; }
+
+/* ─── MOBILE HERO SLIDER (hero-right-mobile) ─── */
+/* Hidden on desktop, visible on mobile/tablet */
+.hero-right-mobile {
+  display: none;
+}
+
+/* The outer wrapper */
+.mobile-hero-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+  /* height controlled per breakpoint */
+}
+
+/* Sliding track — holds all cards side by side */
+.mhs-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Each slide fills full width */
+.mhs-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* Inside a slide, the art-card must fill fully */
+.mhs-slide .art-card,
+.mhs-slide .art-card-main {
+  width: 100% !important;
+  height: 100% !important;
+  flex: none !important;
+  border-radius: 20px !important;
+  grid-row: auto !important;
+}
+
+/* Dot nav positioned below slider */
+.mhs-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 12px;
+}
+.mhs-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 100px;
+  background: rgba(28,24,20,.22);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: width .32s ease, background .32s ease;
+  flex-shrink: 0;
+}
+.mhs-dot.active {
+  width: 26px;
+  background: var(--coral);
+}
 
 /* ─── MARQUEE ─── */
 .marquee-section {
@@ -960,11 +1023,20 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
   .hero { grid-template-columns: 1fr; padding: 8rem 2rem 4rem; min-height: auto; gap: 0; }
   .mobile-badge { display: inline-flex !important; order: -2; justify-self: start; margin-bottom: 0; }
   .desktop-badge { display: none !important; }
-  .hero-right { order: -1; display: flex !important; height: 260px; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-top: 1.5rem; margin-bottom: 2.5rem; }
+
+  /* Hide the 3-card desktop grid, show the unified mobile slider instead */
+  .hero-right { display: none !important; }
+  .hero-right-mobile {
+    display: block;
+    order: -1;
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .mobile-hero-slider { height: 400px; }
+  .mhs-track { height: 400px; }
+
   .hero-left { margin-top: 0; }
-  .hero-right::-webkit-scrollbar { display: none; }
-  .art-card { flex: 0 0 230px !important; height: 260px; scroll-snap-align: start; grid-row: auto !important; border-radius: 18px; }
-  .art-card-main { flex: 0 0 230px !important; grid-row: auto !important; border-radius: 18px; }
   .card-track, .card-slide { height: 100% !important; }
   .ac-title-lg { font-size: 1.25rem; }
   .masonry { grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -992,9 +1064,9 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
 @media(max-width: 768px) {
   nav { padding: .9rem 1.2rem; }
   .hero { padding: 7rem 1.5rem 3.5rem; }
-  .hero-right { order: -1; height: 220px; gap: 10px; margin-top: 1.2rem; margin-bottom: 2rem; }
-  .art-card { flex: 0 0 195px !important; height: 220px; border-radius: 16px; }
-  .art-card-main { flex: 0 0 195px !important; border-radius: 16px; }
+  .mobile-hero-slider { height: 350px; }
+  .mhs-track { height: 350px; }
+  .hero-right-mobile { margin-top: 1.2rem; margin-bottom: 2rem; }
   .ac-tag { font-size: .55rem; padding: .22rem .7rem; }
   .ac-title { font-size: 1rem; }
   .ac-title-lg { font-size: 1rem; }
@@ -1019,9 +1091,9 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
 @media(max-width: 480px) {
   nav { padding: .75rem 1rem; }
   .hero { padding: 6rem 1rem 3rem; }
-  .hero-right { order: -1; height: 190px; margin-top: 1.2rem; margin-bottom: 1.8rem; }
-  .art-card { flex: 0 0 165px !important; height: 190px; border-radius: 14px; }
-  .art-card-main { flex: 0 0 165px !important; border-radius: 14px; }
+  .mobile-hero-slider { height: 300px; }
+  .mhs-track { height: 300px; }
+  .hero-right-mobile { margin-top: 1rem; margin-bottom: 1.8rem; }
   .slide-content { padding: 1rem 1rem .85rem; }
   .ac-title, .ac-title-lg { font-size: .9rem; margin-bottom: .4rem; }
   .hero-h1 { font-size: clamp(1.9rem, 10vw, 2.8rem); }

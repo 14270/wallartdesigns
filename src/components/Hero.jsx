@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+
 /* ═══════════════════════════════════════════
    SINGLE HERO CARD — independent image slider
 ═══════════════════════════════════════════ */
@@ -157,6 +158,109 @@ function HeroCard({ card, ci, isFirst }) {
   );
 }
 
+/* ═══════════════════════════════════════════════════
+   MOBILE HERO SLIDER — single unified slider (mobile/tablet)
+═══════════════════════════════════════════════════ */
+function MobileHeroSlider({ cards }) {
+  const [dot, setDot] = useState(0);
+  const trackRef = useRef(null);
+  const posRef = useRef(0);
+  const lockedRef = useRef(false);
+  const touchXRef = useRef(0);
+  const count = cards.length;
+
+  const moveTo = useCallback((pos, animate = true) => {
+    const el = trackRef.current;
+    if (!el) return;
+    el.style.transition = animate ? 'transform .6s cubic-bezier(.4,0,.2,1)' : 'none';
+    if (!animate) void el.offsetHeight;
+    el.style.transform = `translateX(-${pos * 100}%)`;
+    posRef.current = pos;
+  }, []);
+
+  const advance = useCallback(() => {
+    if (lockedRef.current) return;
+    lockedRef.current = true;
+    const next = posRef.current + 1;
+    
+    if (next >= count) {
+      moveTo(count);
+      setDot(0);
+      setTimeout(() => {
+        moveTo(0, false);
+        requestAnimationFrame(() => { lockedRef.current = false; });
+      }, 600);
+    } else {
+      moveTo(next);
+      setDot(next);
+      setTimeout(() => { lockedRef.current = false; }, 600);
+    }
+  }, [count, moveTo]);
+
+  const jumpTo = useCallback((i) => {
+    if (lockedRef.current) return;
+    moveTo(i);
+    setDot(i);
+  }, [moveTo]);
+
+  useEffect(() => {
+    const id = setInterval(advance, 3600);
+    return () => clearInterval(id);
+  }, [advance]);
+
+  const onTouchStart = (e) => { touchXRef.current = e.touches[0].clientX; };
+  const onTouchEnd   = (e) => {
+    const diff = touchXRef.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) advance();
+      else {
+        if (lockedRef.current) return;
+        lockedRef.current = true;
+        const prev = posRef.current - 1;
+        if (prev < 0) {
+          moveTo(count - 1);
+          setDot(count - 1);
+        } else {
+          moveTo(prev);
+          setDot(prev);
+        }
+        setTimeout(() => { lockedRef.current = false; }, 600);
+      }
+    }
+  };
+
+  const slides = count > 0 ? [...cards, cards[0]] : [];
+
+  return (
+    <div
+      className="mobile-hero-slider"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Card track */}
+      <div className="mhs-track" ref={trackRef}>
+        {slides.map((card, ci) => (
+          <div className="mhs-slide" key={ci}>
+            <HeroCard card={card} ci={ci % count} isFirst={ci % count === 0} />
+          </div>
+        ))}
+      </div>
+
+      {/* Dot navigation */}
+      <div className="mhs-dots">
+        {cards.map((_, i) => (
+          <button
+            key={i}
+            className={`mhs-dot${i === dot ? ' active' : ''}`}
+            onClick={() => jumpTo(i)}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ═════════════════════════
    HERO SECTION
 ═════════════════════════ */
@@ -248,7 +352,8 @@ export default function Hero({ hero }) {
         </div>
       </div>
 
-      {/* ── Right: 3 independent card sliders ── */}
+      {/* ── Right: Desktop 3-card grid / Mobile unified slider ── */}
+      {/* Desktop: 3 independent cards */}
       <div className="hero-right" id="hero-right">
         {cards.map((card, ci) => (
           <HeroCard
@@ -258,6 +363,11 @@ export default function Hero({ hero }) {
             isFirst={ci === 0}
           />
         ))}
+      </div>
+
+      {/* Mobile/Tablet: single unified slider */}
+      <div className="hero-right-mobile">
+        <MobileHeroSlider cards={cards} />
       </div>
     </section>
   );
