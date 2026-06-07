@@ -122,6 +122,86 @@ nav {
 }
 .nav-admin-btn:hover { border-color: var(--coral); color: var(--coral); background: rgba(232,96,58,.05); }
 
+/* Sidebar and Hamburger CSS */
+.nav-hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--charcoal);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+}
+.dark .nav-hamburger {
+  color: #fff;
+}
+
+.mobile-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-sidebar-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--cream);
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 5rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+}
+.mobile-sidebar.show {
+  transform: translateX(0);
+}
+
+.mobile-sidebar-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: transparent;
+  border: none;
+  color: var(--charcoal);
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.mobile-sidebar-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.mobile-sidebar-links a {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+.mobile-sidebar-links a:hover {
+  color: var(--coral);
+}
+
 /* ─── HERO ─── */
 .hero {
   min-height: 100vh; background: var(--cream);
@@ -1020,6 +1100,7 @@ footer { background: var(--cream); padding: 5rem 3rem 2rem; }
 @media(max-width: 960px) {
   nav { padding: 1rem 1.5rem; }
   .nav-links { display: none; }
+  .nav-hamburger { display: block; }
   .hero { grid-template-columns: 1fr; padding: 8rem 2rem 4rem; min-height: auto; gap: 0; }
   .mobile-badge { display: inline-flex !important; order: -2; justify-self: start; margin-bottom: 0; }
   .desktop-badge { display: none !important; }
