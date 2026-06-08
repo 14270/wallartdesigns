@@ -710,8 +710,8 @@ function AboutPanel({ data, onChange }) {
       <div className="ad-group">
         <div className="ad-group-label">Statistics</div>
         {[1, 2, 3, 4].map((n) => (
-          <div className="ad-row" key={n}>
-            <div className="ad-field">
+          <div className="ad-row" key={n} style={{ alignItems: "flex-start", flexWrap: "wrap" }}>
+            <div className="ad-field" style={{ flex: 1, minWidth: "120px" }}>
               <label>Stat {n} Value</label>
               <input
                 type="text"
@@ -719,13 +719,75 @@ function AboutPanel({ data, onChange }) {
                 onChange={(e) => set(`s${n}v`, e.target.value)}
               />
             </div>
-            <div className="ad-field">
+            <div className="ad-field" style={{ flex: 1, minWidth: "120px" }}>
               <label>Stat {n} Label</label>
               <input
                 type="text"
                 value={a[`s${n}l`] || ""}
                 onChange={(e) => set(`s${n}l`, e.target.value)}
               />
+            </div>
+            <div className="ad-field" style={{ flex: 1, minWidth: "160px" }}>
+              <label>Background Image</label>
+              {a[`s${n}bg`] && (
+                <div
+                  style={{
+                    marginBottom: ".5rem",
+                    position: "relative",
+                    width: "80px",
+                    height: "60px",
+                    borderRadius: "6px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <img
+                    src={a[`s${n}bg`]}
+                    alt="preview"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <button
+                    onClick={() => set(`s${n}bg`, null)}
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      right: "2px",
+                      background: "rgba(0,0,0,.8)",
+                      color: "#ff4d4d",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "18px",
+                      height: "18px",
+                      cursor: "pointer",
+                      fontSize: ".7rem",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+              <label
+                className="gal-item-change-btn"
+                style={{ marginTop: a[`s${n}bg`] ? ".4rem" : "0" }}
+              >
+                📷 Upload Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const url = await fileToDataUrl(file);
+                    set(`s${n}bg`, url);
+                  }}
+                />
+              </label>
             </div>
           </div>
         ))}

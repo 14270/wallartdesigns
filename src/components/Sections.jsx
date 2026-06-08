@@ -119,14 +119,48 @@ export function About({ about, contact }) {
         </div>
         <div className="stats-grid rv rv-right">
           {[
-            { v: about?.s1v, l: about?.s1l },
-            { v: about?.s2v, l: about?.s2l },
-            { v: about?.s3v, l: about?.s3l },
-            { v: about?.s4v, l: about?.s4l },
+            { v: about?.s1v, l: about?.s1l, bg: about?.s1bg },
+            { v: about?.s2v, l: about?.s2l, bg: about?.s2bg },
+            { v: about?.s3v, l: about?.s3l, bg: about?.s3bg },
+            { v: about?.s4v, l: about?.s4l, bg: about?.s4bg },
           ].map((s, i) => (
-            <div className="stat-card" key={i}>
-              <div className="stat-v">{s.v}</div>
-              <div className="stat-l">{s.l}</div>
+            <div
+              className={`stat-card ${s.bg ? 'has-bg' : ''}`}
+              key={i}
+              style={s.bg ? {
+                position: 'relative',
+                overflow: 'hidden',
+                color: '#fff',
+              } : {}}
+            >
+              {s.bg && (
+                <>
+                  <img
+                    src={s.bg}
+                    alt=""
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      zIndex: 0,
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 100%)',
+                      zIndex: 1,
+                    }}
+                  />
+                </>
+              )}
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                <div className="stat-v" style={s.bg ? { color: '#fff' } : {}}>{s.v}</div>
+                <div className="stat-l" style={s.bg ? { color: 'rgba(255,255,255,0.8)' } : {}}>{s.l}</div>
+              </div>
             </div>
           ))}
         </div>
