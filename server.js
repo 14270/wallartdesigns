@@ -114,7 +114,8 @@ app.post('/api/data', (req, res) => {
   }
 });
 
-// Removed separate uploads serving; served via dist now
+// Serve uploaded images at /uploads/...
+app.use('/uploads', express.static(UPLOADS_DIR));
 
 // Serve static files from the 'dist' directory
 app.use(express.static(path.join(__dirname, 'dist')));

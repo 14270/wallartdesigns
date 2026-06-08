@@ -151,7 +151,7 @@ export function About({ about, contact }) {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(135deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 100%)',
+                      background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 80%)',
                       zIndex: 1,
                     }}
                   />

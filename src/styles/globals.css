@@ -645,9 +645,11 @@ nav {
 
 /* When stat-card has a background image */
 .stat-card.has-bg {
-  padding: 3rem 2rem;
+  padding: 3rem 2rem 2rem 2rem;
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  min-height: 220px;
+  justify-content: flex-end;
 }
 .stat-card.has-bg .stat-v {
   font-size: 2.2rem;
