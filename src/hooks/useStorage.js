@@ -51,19 +51,32 @@ async function saveToIDB(data) {
 /* ── Optional server sync (when Express is running) ── */
 async function syncToServer(data) {
   try {
-    await fetch('/api/data', {
+    const res = await fetch('/api/data', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(data),
     });
+    if (!res.ok) return null;
+    // After the server saves, fetch back the processed version
+    // (base64 blobs replaced with /uploads/ paths)
+    const refreshed = await loadFromServer();
+    return refreshed; // null if fetch failed
   } catch {
     // Express not running — that's fine, IDB is the source of truth
+    return null;
   }
 }
 
 async function loadFromServer() {
   try {
-    const res = await fetch(`/api/data?t=${Date.now()}`);
+    // 1. Try the dynamic API endpoint first
+    let res = await fetch(`/api/data?t=${Date.now()}`);
+    
+    // 2. If the API doesn't exist (e.g. static hosting on Vercel), fallback to the static data.json file
+    if (!res.ok) {
+      res = await fetch(`/data.json?t=${Date.now()}`);
+    }
+
     if (!res.ok) return null;
     const data = await res.json();
     return (data && typeof data === 'object') ? data : null;
@@ -114,8 +127,20 @@ export function useStorage() {
       // Save to IndexedDB immediately (primary, always works)
       saveToIDB(next);
 
-      // Also try to sync to Express server in background (secondary)
-      syncToServer(next);
+      // Sync to Express server in background; if it succeeds,
+      // replace IDB + React state with the server's processed version
+      // (base64 blobs → /uploads/ file paths)
+      syncToServer(next).then((serverData) => {
+        if (serverData) {
+          // Merge missing defaults into server response
+          if (!serverData.categories || !Object.keys(serverData.categories).length) {
+            serverData.categories = deepClone(DEFAULT_DATA.categories);
+          }
+          saveToIDB(serverData);
+          // Update React state so the UI immediately reflects /uploads/ paths
+          setSiteData(serverData);
+        }
+      });
 
       return next;
     });

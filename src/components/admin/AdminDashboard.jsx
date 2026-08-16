@@ -391,6 +391,8 @@ function GalleryPanel({ data, onChange }) {
   const [newBg, setNewBg] = useState("mb1");
   const [newImgUrl, setNewImgUrl] = useState("");
   const [newImgPreview, setNewImgPreview] = useState("");
+  const [newVideoUrl, setNewVideoUrl] = useState("");
+  const [newVideoPreview, setNewVideoPreview] = useState("");
   const [newCatLabel, setNewCatLabel] = useState("");
   const cats = data.categories || {};
   const gallery = data.gallery || [];
@@ -408,6 +410,7 @@ function GalleryPanel({ data, onChange }) {
         id: maxId + 1,
         emoji: "🎨",
         imgUrl: newImgUrl,
+        videoUrl: newVideoUrl,
         cat: newCat,
         title: newTitle,
         ratio: 120,
@@ -418,6 +421,8 @@ function GalleryPanel({ data, onChange }) {
     setNewTitle("");
     setNewImgUrl("");
     setNewImgPreview("");
+    setNewVideoUrl("");
+    setNewVideoPreview("");
   };
   const deleteItem = (id) =>
     onChange((d) => {
@@ -438,11 +443,24 @@ function GalleryPanel({ data, onChange }) {
     setNewImgUrl(url);
     setNewImgPreview(url);
   };
+  const handleNewVideo = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = await fileToDataUrl(file);
+    setNewVideoUrl(url);
+    setNewVideoPreview(url);
+  };
   const handleItemImg = async (id, e) => {
     const file = e.target.files[0];
     if (!file) return;
     const url = await fileToDataUrl(file);
     updateItem(id, "imgUrl", url);
+  };
+  const handleItemVideo = async (id, e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = await fileToDataUrl(file);
+    updateItem(id, "videoUrl", url);
   };
   const addCategory = () => {
     if (!newCatLabel.trim()) return;
@@ -564,6 +582,23 @@ function GalleryPanel({ data, onChange }) {
                     onChange={(e) => handleItemImg(item.id, e)}
                   />
                 </label>
+                <label className="gal-item-change-btn gal-item-change-btn--video">
+                  🎬 {item.videoUrl ? "Change Video" : "Add Video"}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => handleItemVideo(item.id, e)}
+                  />
+                </label>
+                {item.videoUrl && (
+                  <button
+                    className="gal-item-remove-video-btn"
+                    onClick={() => updateItem(item.id, "videoUrl", "")}
+                    title="Remove video"
+                  >
+                    ✕ Remove Video
+                  </button>
+                )}
               </div>
               <button
                 className="gal-del-btn"
@@ -578,6 +613,9 @@ function GalleryPanel({ data, onChange }) {
       <div className="ad-group">
         <div className="gal-add-form">
           <div className="gal-add-title">➕ Add New Gallery Item</div>
+
+          {/* Image Upload */}
+          <div className="gal-media-label">🖼️ Image</div>
           <div className="gal-upload-zone">
             <input type="file" accept="image/*" onChange={handleNewImg} />
             <span className="uz-icon">📸</span>
@@ -598,6 +636,34 @@ function GalleryPanel({ data, onChange }) {
               </button>
             </div>
           )}
+
+          {/* Video Upload */}
+          <div className="gal-media-label" style={{ marginTop: "1rem" }}>🎬 Video (optional)</div>
+          <div className="gal-upload-zone gal-upload-zone--video">
+            <input type="file" accept="video/*" onChange={handleNewVideo} />
+            <span className="uz-icon">🎬</span>
+            <div className="uz-text">Click or Drag & Drop Video Here</div>
+            <div className="uz-hint">MP4, WEBM, MOV — keep under 30MB</div>
+          </div>
+          {newVideoPreview && (
+            <div className="uz-preview-wrap show">
+              <video
+                src={newVideoPreview}
+                controls
+                style={{ width: "100%", height: "140px", objectFit: "cover", borderRadius: "8px", display: "block", background: "#000" }}
+              />
+              <button
+                className="uz-clear"
+                onClick={() => {
+                  setNewVideoUrl("");
+                  setNewVideoPreview("");
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <div className="gal-add-grid">
             <div className="ad-field">
               <label>Title</label>

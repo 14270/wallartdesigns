@@ -74,9 +74,15 @@ export function Gallery({ gallery, categories, onOpenLightbox, onCategoryClick }
                   <img className="m-real-img" src={item.imgUrl} alt="" onError={(e) => { e.target.style.display = 'none'; }} />
                 )}
               </div>
+              {item.videoUrl && (
+                <div className="m-video-badge" title="This project has a video">
+                  <span>▶</span>
+                </div>
+              )}
               <div className="m-hover">
                 <div className="m-cat">{allCats[item.cat] || item.cat}</div>
                 <div className="m-title">{item.title}</div>
+                {item.videoUrl && <div className="m-video-hint">🎬 Video available</div>}
               </div>
             </div>
           </div>

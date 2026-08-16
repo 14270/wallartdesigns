@@ -178,7 +178,11 @@
     "s3v": "6+",
     "s3l": "Cities Served",
     "s4v": "100%",
-    "s4l": "Client Satisfaction"
+    "s4l": "Client Satisfaction",
+    "s1bg": "/uploads/img_1780911696095_12voe1.png",
+    "s2bg": "/uploads/img_1780911696104_eel1j5.png",
+    "s3bg": "/uploads/img_1780911696112_a33ks6.png",
+    "s4bg": "/uploads/img_1780911696119_u30xoi.png"
   },
   "services": [
     {
@@ -187,7 +191,7 @@
       "title": "3D Wall Sculpture",
       "desc": "Adds depth, texture, and a striking focal point. Custom sculpted panels that create dramatic dimension.",
       "style": "coral",
-      "imgUrl": "/uploads/img_1779860238343_5vcuro.png"
+      "imgUrl": "/uploads/img_1780911696123_4v9u51.jpeg"
     },
     {
       "num": "02",

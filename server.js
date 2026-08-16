@@ -6,33 +6,40 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'public', 'data.json');
 
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ limit: '500mb', extended: true }));
 
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }
 
-function saveBase64Image(base64Str) {
-  const match = base64Str.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+function saveBase64Media(base64Str) {
+  const match = base64Str.match(/^data:(image|video)\/([a-zA-Z0-9+]+);base64,(.+)$/);
   if (!match) return base64Str;
 
-  let ext = match[1];
+  const mediaType = match[1];
+  let ext = match[2];
   if (ext === 'svg+xml') ext = 'svg';
-  const data = match[2];
+  if (ext === 'quicktime') ext = 'mov';
+  const data = match[3];
   const buffer = Buffer.from(data, 'base64');
 
-  const filename = `img_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
+  const prefix = mediaType === 'video' ? 'vid' : 'img';
+  const filename = `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${ext}`;
   const filepath = path.join(UPLOADS_DIR, filename);
 
   fs.writeFileSync(filepath, buffer);
   return `/uploads/${filename}`;
 }
 
+// Keep old name as alias for backward compatibility
+const saveBase64Image = saveBase64Media;
+
 function processJsonImages(obj) {
   if (typeof obj === 'string') {
-    if (obj.startsWith('data:image/')) {
-      return saveBase64Image(obj);
+    if (obj.startsWith('data:image/') || obj.startsWith('data:video/')) {
+      return saveBase64Media(obj);
     }
     return obj;
   } else if (Array.isArray(obj)) {
@@ -59,9 +66,9 @@ if (fs.existsSync(DATA_FILE)) {
 
     function migrateBase64(obj) {
       if (typeof obj === 'string') {
-        if (obj.startsWith('data:image/')) {
+        if (obj.startsWith('data:image/') || obj.startsWith('data:video/')) {
           migratedCount++;
-          return saveBase64Image(obj);
+          return saveBase64Media(obj);
         }
         return obj;
       } else if (Array.isArray(obj)) {
